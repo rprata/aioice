@@ -10,13 +10,14 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: 3.7
+          python-version: 3.9
       - name: Install packages
         run: pip install black mypy ruff
       - name: Run linters
         run: |
-          ruff examples src tests
-          black --check --diff examples src tests
+          ruff check .
+          ruff format --check --diff .
+          check-manifest
           mypy src
 
   test:
@@ -25,11 +26,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python:
+          - '3.13'
+          - '3.12'
           - '3.11'
           - '3.10'
           - '3.9'
-          - '3.8'
-          - '3.7'
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -56,7 +57,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: 3.7
+          python-version: 3.9
       - name: Install packages
         run: pip install build wheel
       - name: Build package

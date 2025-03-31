@@ -13,6 +13,7 @@ import websockets
 STUN_SERVER = ("stun.l.google.com", 19302)
 WEBSOCKET_URI = "ws://127.0.0.1:8765"
 
+
 async def offer(options):
     connection = aioice.Connection(
         ice_controlling=True, components=options.components, stun_server=STUN_SERVER
@@ -46,7 +47,7 @@ async def offer(options):
 
     await connection.connect()
     elapsed = time.time() - start_time
-    print(f"✅ connected in {elapsed:.2f} seconds")
+    print(f"connected in {elapsed:.2f} seconds")
 
     # send data
     data = b"hello"
