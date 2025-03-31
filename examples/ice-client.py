@@ -4,13 +4,14 @@ import argparse
 import asyncio
 import json
 import logging
+import time
+from typing import Optional
 
 import aioice
 import websockets
 
 STUN_SERVER = ("stun.l.google.com", 19302)
 WEBSOCKET_URI = "ws://127.0.0.1:8765"
-
 
 async def offer(options):
     connection = aioice.Connection(
@@ -20,6 +21,7 @@ async def offer(options):
 
     websocket = await websockets.connect(WEBSOCKET_URI)
 
+    start_time = time.time()
     # send offer
     await websocket.send(
         json.dumps(
@@ -43,7 +45,8 @@ async def offer(options):
     await websocket.close()
 
     await connection.connect()
-    print("connected")
+    elapsed = time.time() - start_time
+    print(f"✅ connected in {elapsed:.2f} seconds")
 
     # send data
     data = b"hello"

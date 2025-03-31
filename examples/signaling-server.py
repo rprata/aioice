@@ -1,19 +1,14 @@
 #!/usr/bin/env python
-#
-# Simple websocket server to perform signaling.
-#
 
 import asyncio
 import binascii
 import os
-
 import websockets
 
 clients = {}
 
-
-async def echo(websocket, path):
-    client_id = binascii.hexlify(os.urandom(8))
+async def echo(websocket):
+    client_id = binascii.hexlify(os.urandom(8)).decode()
     clients[client_id] = websocket
 
     try:
@@ -24,6 +19,9 @@ async def echo(websocket, path):
     finally:
         clients.pop(client_id)
 
+async def main():
+    async with websockets.serve(echo, "0.0.0.0", 8765):
+        await asyncio.Future()
 
-asyncio.get_event_loop().run_until_complete(websockets.serve(echo, "0.0.0.0", 8765))
-asyncio.get_event_loop().run_forever()
+if __name__ == "__main__":
+    asyncio.run(main())
